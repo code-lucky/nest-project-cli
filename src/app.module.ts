@@ -5,6 +5,8 @@ import { RedisModule } from './redis/redis.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -35,7 +37,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           database: configService.get('mysql_server_database'),
           synchronize: true,
           logging: true,
-          entities: [],
+          entities: [User],
           poolSize: 10,
           connectorPackage: 'mysql2',
           extra: {
@@ -45,7 +47,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       },
       inject: [ConfigService]
     }),
-    RedisModule
+    RedisModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],
