@@ -5,11 +5,40 @@ import { RedisModule } from './redis/redis.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
-import { User } from './user/entities/user.entity';
+import { UserModule } from './api/user/user.module';
+import { User } from './api/user/entities/user.entity';
+import { EmailModule } from './api/email/email.module';
+import { WinstonModule } from './winston/winston.module';
+import { format, transports } from 'winston';
+import * as chalk from 'chalk';
 
 @Module({
   imports: [
+    WinstonModule.forRoot({
+      level: 'debug',
+      transports: [
+          new transports.Console({
+              format: format.combine(
+                  format.colorize(),
+                  format.printf(({context, level, message, time}) => {
+                      const appStr = chalk.green(`[NEST]`);
+                      const contextStr = chalk.yellow(`[${context}]`);
+  
+                      return `${appStr} ${time} ${level} ${contextStr} ${message} `;
+                  })
+              ),
+
+          }),
+          new transports.File({
+              format: format.combine(
+                  format.timestamp(),
+                  format.json()
+              ),
+              filename: 'loggger.log',
+              dirname: 'log'
+          })
+        ]
+    }),
     JwtModule.registerAsync({
       global: true,
       useFactory(configService: ConfigService){
@@ -48,6 +77,7 @@ import { User } from './user/entities/user.entity';
       inject: [ConfigService]
     }),
     RedisModule,
+    EmailModule,
     UserModule
   ],
   controllers: [AppController],

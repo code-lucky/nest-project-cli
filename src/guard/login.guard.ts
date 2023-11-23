@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { UnLoginException } from './unlogin.filter';
-import { Permission } from '../user/entities/permission.entity';
+import { Permission } from '../api/user/entities/permission.entity';
 
 interface JwtUserData {
   userId: number;
