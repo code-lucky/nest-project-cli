@@ -4,13 +4,16 @@ import { FormatResponseInterceptor } from './interceptors/format-response.interc
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { InvokeRecordInterceptor } from './interceptors/invoke-record.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  // 开启跨域处理
+  app.enableCors()
   // 全局启用
   app.useGlobalPipes(new ValidationPipe())
   app.useGlobalInterceptors(new FormatResponseInterceptor())
+  app.useGlobalInterceptors(new InvokeRecordInterceptor())
 
   const config = new DocumentBuilder()
     .setTitle('nest-cli')

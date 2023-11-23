@@ -29,7 +29,8 @@ export class User {
 
     @Column({
         length: 50,
-        comment: '邮箱'
+        comment: '邮箱',
+        nullable: true
     })
     email: string;
 
