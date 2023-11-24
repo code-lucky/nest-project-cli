@@ -24,6 +24,10 @@ async function bootstrap() {
     .setTitle('nest-cli')
     .setDescription('api接口文档')
     .setVersion('1.0')
+    .addSecurity('basic', {
+      type: 'http',
+      scheme: 'basic',
+    })
     .build()
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api-doc', app, document)

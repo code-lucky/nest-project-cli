@@ -34,8 +34,9 @@ import * as chalk from 'chalk';
                   format.timestamp(),
                   format.json()
               ),
-              filename: 'loggger.log',
-              dirname: 'log'
+              filename: `loggger-${new Date().getTime()}.log`,
+              dirname: 'log',
+              maxsize: 1024*1024
           })
         ]
     }),
