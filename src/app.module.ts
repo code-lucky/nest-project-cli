@@ -11,6 +11,7 @@ import { EmailModule } from './api/email/email.module';
 import { WinstonModule } from './winston/winston.module';
 import { format, transports } from 'winston';
 import * as chalk from 'chalk';
+import { Constant } from './utils/constant';
 
 @Module({
   imports: [
@@ -34,8 +35,8 @@ import * as chalk from 'chalk';
                   format.timestamp(),
                   format.json()
               ),
-              filename: `loggger-${new Date().getTime()}.log`,
-              dirname: 'log',
+              filename: `loggger-${Constant.CURRENT_DATE}-${Constant.TIMESTAMP}.log`,
+              dirname: `log/${Constant.CURRENT_DATE}`,
               maxsize: 1024*1024
           })
         ]

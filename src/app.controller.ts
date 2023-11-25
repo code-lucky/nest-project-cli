@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { storage } from './config/storage';
 
 @Controller()
 export class AppController {
@@ -12,10 +13,10 @@ export class AppController {
   }
 
   @Post('upload_img')
-  @UseInterceptors(FileInterceptor('aaa',{
-    dest:'uploads'
+  @UseInterceptors(AnyFilesInterceptor({
+    storage: storage
   }))
-  upload_test(@UploadedFile() file: Express.Multer.File, @Body() body){
+  upload_test(@UploadedFiles() file: Express.Multer.File, @Body() body){
     console.log('body', body);
     console.log('file', file);
   }
