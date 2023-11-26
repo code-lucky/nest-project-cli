@@ -12,10 +12,10 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Post('upload_img')
-  @UseInterceptors(AnyFilesInterceptor({
-    storage: storage
-  }))
+  // @Post('upload_img')
+  // @UseInterceptors(AnyFilesInterceptor({
+  //   storage: storage
+  // }))
   upload_test(@UploadedFiles() file: Express.Multer.File, @Body() body){
     console.log('body', body);
     console.log('file', file);

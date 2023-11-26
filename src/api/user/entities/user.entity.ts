@@ -21,9 +21,9 @@ export class User {
     password: string;
 
     @Column({
-        name: 'nick_name',
         length: 50,
-        comment: '昵称'
+        comment: '昵称',
+        nullable: true
     })
     nickName: string;
 

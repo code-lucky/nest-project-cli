@@ -1,26 +1,84 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { RedisService } from 'src/redis/redis.service';
+import { md5 } from 'src/utils/md5';
+import { UserLoginByEmailDto } from './dto/user-login-email.dto';
+import { LoginUserVo } from './vo/login-user.vo';
+import { userLoginByPasswordDto } from './dto/user-login-password.dto';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  
+  @InjectRepository(User)
+  private userRepository: Repository<User>;
+
+  @Inject(RedisService)
+  private redisService: RedisService;
+
+  async createUsr(user: RegisterUserDto){
+    const captcha = await this.redisService.get(`captcha_register_${user.email}`)
+
+    if(!captcha){
+      throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST)
+    }
+
+    if(user.captcha !== captcha){
+      throw new HttpException('验证码不正确', HttpStatus.BAD_REQUEST)
+    }
+
+    const getUser = await this.userRepository.findOneBy({username: user.username})
+    if(getUser){
+      throw new HttpException('用户已存在',HttpStatus.BAD_REQUEST)
+    }
+
+    const addUser = new User();
+    addUser.username = user.username;
+    addUser.password = md5(user.password)
+    addUser.email = user.email;
+
+    try{
+      await this.userRepository.save(addUser);
+      return '注册成功'
+    }catch(e){
+      return '注册失败';
+    }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async userLoginByEmail(userLoginByEmail: UserLoginByEmailDto){
+
+    const captcha = await this.redisService.get(`captcha_login_${userLoginByEmail.email}`)
+
+    if(!captcha){
+      throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST)
+    }
+
+    if(userLoginByEmail.captcha !== captcha){
+      throw new HttpException('验证码不正确', HttpStatus.BAD_REQUEST)
+    }
+    const user = await this.userRepository.findOneBy({
+      email: userLoginByEmail.email
+    })
+    const vo = new LoginUserVo();
+    const {id, username, nickName, email, headPic, phoneNumber} = user
+    vo.userInfo = {id, username, nickName, email, headPic, phoneNumber}
+    return vo;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async userLoginByPassword(userLogin: userLoginByPasswordDto){
+    const user = await this.userRepository.findOneBy({
+      username: userLogin.username
+    })
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+    if(user.password !== md5(userLogin.password)){
+      throw new HttpException('密码错误', HttpStatus.BAD_REQUEST)
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    const vo = new LoginUserVo();
+    const {id, username, nickName, email, headPic, phoneNumber} = user
+    vo.userInfo = {id, username, nickName, email, headPic, phoneNumber}
+    return vo
   }
 }

@@ -6,6 +6,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { InvokeRecordInterceptor } from './interceptors/invoke-record.interceptor';
 import { WINSTON_LOGGER_TOKEN } from './winston/winston.module';
+import { CustomExceptionFilter } from './filter/custom-exception.filter';
+import { UnloginFilter } from './guard/unlogin.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,6 +21,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
   app.useGlobalInterceptors(new FormatResponseInterceptor())
   app.useGlobalInterceptors(new InvokeRecordInterceptor())
+  app.useGlobalFilters(new UnloginFilter())
+  app.useGlobalFilters(new CustomExceptionFilter())
 
   const config = new DocumentBuilder()
     .setTitle('nest-cli')

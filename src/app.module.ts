@@ -12,6 +12,8 @@ import { WinstonModule } from './winston/winston.module';
 import { format, transports } from 'winston';
 import * as chalk from 'chalk';
 import { Constant } from './utils/constant';
+import { APP_GUARD } from '@nestjs/core';
+import { LoginGuard } from './guard/login.guard';
 
 @Module({
   imports: [
@@ -83,6 +85,12 @@ import { Constant } from './utils/constant';
     UserModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: LoginGuard
+    }
+  ],
 })
 export class AppModule {}
