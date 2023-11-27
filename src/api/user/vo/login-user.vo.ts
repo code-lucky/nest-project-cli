@@ -6,10 +6,7 @@ class UserInfo{
   id: number;
   
   @ApiProperty()
-  username: string;
-
-  @ApiProperty()
-  nickName: string;
+  userName: string;
 
   @ApiProperty()
   email: string;

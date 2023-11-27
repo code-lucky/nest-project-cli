@@ -7,7 +7,7 @@ export class userLoginByPasswordDto{
     @IsNotEmpty({
         message: '用户名不能为空'
     })
-    username: string;
+    userName: string;
 
     @ApiProperty()
     @IsNotEmpty({

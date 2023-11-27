@@ -14,6 +14,9 @@ import * as chalk from 'chalk';
 import { Constant } from './utils/constant';
 import { APP_GUARD } from '@nestjs/core';
 import { LoginGuard } from './guard/login.guard';
+import { RoleModule } from './api/role/role.module';
+import { AdminRole } from './api/entitys/admin_role.entity';
+import { AdminUser } from './api/entitys/admin_user.entity';
 
 @Module({
   imports: [
@@ -70,7 +73,7 @@ import { LoginGuard } from './guard/login.guard';
           database: configService.get('mysql_server_database'),
           synchronize: true,
           logging: true,
-          entities: [User],
+          entities: [User, AdminRole, AdminUser],
           poolSize: 10,
           connectorPackage: 'mysql2',
           extra: {
@@ -82,7 +85,8 @@ import { LoginGuard } from './guard/login.guard';
     }),
     RedisModule,
     EmailModule,
-    UserModule
+    UserModule,
+    RoleModule
   ],
   controllers: [AppController],
   providers: [
