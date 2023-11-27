@@ -110,7 +110,7 @@ export class UserController {
     description: '用户信息和token',
     type: LoginUserVo
   })
-  async userLoginByPassword(userLogin: userLoginByPasswordDto){
+  async userLoginByPassword(@Body()userLogin: userLoginByPasswordDto){
     const vo = await this.userService.userLoginByPassword(userLogin)
 
     vo.accessToken = this.jwtService.sign({
@@ -127,5 +127,17 @@ export class UserController {
     });
 
     return vo;
+  }
+
+  @Get('getUserInfo')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '获取用户信息',
+    type: LoginUserVo
+  })
+  @RequireLogin()
+  @ApiBearerAuth()
+  async getUserInfo(@Query('userId')userId: number){
+    return await this.userService.getUserInfo(userId)
   }
 }

@@ -28,9 +28,9 @@ async function bootstrap() {
     .setTitle('nest-cli')
     .setDescription('api接口文档')
     .setVersion('1.0')
-    .addSecurity('basic', {
+    .addBearerAuth({
       type: 'http',
-      scheme: 'basic',
+      description: '基于jwt的认证'
     })
     .build()
   const document = SwaggerModule.createDocument(app, config)

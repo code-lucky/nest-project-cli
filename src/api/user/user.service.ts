@@ -8,6 +8,7 @@ import { md5 } from 'src/utils/md5';
 import { UserLoginByEmailDto } from './dto/user-login-email.dto';
 import { LoginUserVo } from './vo/login-user.vo';
 import { userLoginByPasswordDto } from './dto/user-login-password.dto';
+import { UserInfoVo } from './vo/user-info.vo';
 
 @Injectable()
 export class UserService {
@@ -72,6 +73,10 @@ export class UserService {
       username: userLogin.username
     })
 
+    if(!user){
+      throw new HttpException('未找到该用户', HttpStatus.BAD_REQUEST)
+    }
+
     if(user.password !== md5(userLogin.password)){
       throw new HttpException('密码错误', HttpStatus.BAD_REQUEST)
     }
@@ -79,6 +84,22 @@ export class UserService {
     const vo = new LoginUserVo();
     const {id, username, nickName, email, headPic, phoneNumber} = user
     vo.userInfo = {id, username, nickName, email, headPic, phoneNumber}
+    return vo
+  }
+
+  async getUserInfo(userId: number){
+    const user = await this.userRepository.findOneBy({id:userId})
+    if(!user)throw new HttpException('未找到该用户', HttpStatus.BAD_REQUEST)
+    
+    const vo = new UserInfoVo();
+    
+    const {id, username, nickName, email, headPic, phoneNumber} = user
+    vo.id = id;
+    vo.username = username;
+    vo.nickName = nickName;
+    vo.email = email;
+    vo.headPic = headPic;
+    vo.phoneNumber = phoneNumber
     return vo
   }
 }
