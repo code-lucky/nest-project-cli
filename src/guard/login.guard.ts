@@ -4,13 +4,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { UnLoginException } from './unlogin.filter';
-import { Permission } from '../api/user/entities/permission.entity';
 
 interface JwtUserData {
   userId: number;
   username: string;
   roles: string[];
-  permissions: Permission[]
 }
 
 declare module 'express' {
@@ -56,8 +54,7 @@ export class LoginGuard implements CanActivate {
       request.user = {
         userId: data.userId,
         username: data.username,
-        roles: data.roles,
-        permissions: data.permissions
+        roles: data.roles
       }
       return true;
     } catch(e) {

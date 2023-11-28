@@ -1,7 +1,5 @@
 import { Body, Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
-import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { storage } from './config/storage';
 
 @Controller()
 export class AppController {

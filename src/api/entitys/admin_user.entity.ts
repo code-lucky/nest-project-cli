@@ -27,6 +27,12 @@ export class AdminUser{
     headPic: string;
 
     @Column({
+        name: 'role_id',
+        comment: '关联角色表id'
+    })
+    roleId: number;
+
+    @Column({
         name: 'phone_number',
         comment: '手机号码',
         length: 20,

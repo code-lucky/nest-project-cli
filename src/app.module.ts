@@ -6,7 +6,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './api/user/user.module';
-import { User } from './api/user/entities/user.entity';
 import { EmailModule } from './api/email/email.module';
 import { WinstonModule } from './winston/winston.module';
 import { format, transports } from 'winston';
@@ -17,6 +16,8 @@ import { LoginGuard } from './guard/login.guard';
 import { RoleModule } from './api/role/role.module';
 import { AdminRole } from './api/entitys/admin_role.entity';
 import { AdminUser } from './api/entitys/admin_user.entity';
+import { AdminMenu } from './api/entitys/admin_menu.entity';
+import { AdminRoleMenu } from './api/entitys/admin_role.menu.entity';
 
 @Module({
   imports: [
@@ -73,7 +74,7 @@ import { AdminUser } from './api/entitys/admin_user.entity';
           database: configService.get('mysql_server_database'),
           synchronize: true,
           logging: true,
-          entities: [User, AdminRole, AdminUser],
+          entities: [AdminRole, AdminUser, AdminMenu, AdminRoleMenu],
           poolSize: 10,
           connectorPackage: 'mysql2',
           extra: {

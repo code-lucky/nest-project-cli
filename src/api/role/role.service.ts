@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
 import { AdminRole } from '../entitys/admin_role.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateAdminMenuDto } from './dto/create-admin-menu.dto';
+import { AdminMenu } from '../entitys/admin_menu.entity';
+import { AdminUser } from '../entitys/admin_user.entity';
 
 @Injectable()
 export class RoleService {
@@ -11,7 +13,18 @@ export class RoleService {
   @InjectRepository(AdminRole)
   private roleRepository: Repository<AdminRole>;
 
-  async create(createRoleDto: CreateRoleDto) {
+  @InjectRepository(AdminMenu)
+  private menuRepository: Repository<AdminMenu>;
+
+  @InjectRepository(AdminUser)
+  private userRepository: Repository<AdminUser>;
+
+  /**
+   * 创建角色用户
+   * @param createRoleDto 
+   * @returns 
+   */
+  async createRoleUser(createRoleDto: CreateRoleDto) {
     const result = await this.roleRepository.save(createRoleDto)
     if(result){
       return '添加成功'
@@ -20,19 +33,26 @@ export class RoleService {
     }
   }
 
-  findAll() {
-    return `This action returns all role`;
+  /**
+   * 菜单列表
+   * @returns 
+   */
+  async menuList(){
+    const menuList = await this.menuRepository.find()
+    return menuList
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
-  }
-
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  /**
+   * 创建菜单
+   * @param adminMenu 
+   * @returns 
+   */
+  async createMen(adminMenu: CreateAdminMenuDto){
+    const result = await this.menuRepository.save(adminMenu)
+    if(result){
+      return '添加成功'
+    }else{
+      return '添加失败'
+    }
   }
 }
