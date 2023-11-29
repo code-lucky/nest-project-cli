@@ -22,8 +22,7 @@ export class AdminRole {
     level: number;
 
     @Column({
-        name: 'status',
-        comment: '角色状态',
+        comment:'角色状态,0显示，1隐藏',
         default: 0
     })
     status: number;

@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { AdminRole } from '../entitys/admin_role.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAdminMenuDto } from './dto/create-admin-menu.dto';
 import { AdminMenu } from '../entitys/admin_menu.entity';
 import { AdminUser } from '../entitys/admin_user.entity';
+import { RoleListVo } from './vo/role-list.vo';
 
 @Injectable()
 export class RoleService {
@@ -54,5 +55,24 @@ export class RoleService {
     }else{
       return '添加失败'
     }
+  }
+
+  async findRoleUserList(roleName: string){
+    let roleList = []
+    const condition: Record<string, any> = {};
+
+    if(roleName){
+      condition.roleName = Like(`%${roleName}%`);   
+    }
+
+    roleList = await this.roleRepository.findBy({
+      roleName: roleName
+    })
+    
+    console.log('roleList', roleList)
+    const roleListVo = new RoleListVo()
+
+    roleListVo.roleList = roleList
+    return roleListVo.roleList
   }
 }

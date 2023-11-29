@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Query, DefaultValuePipe } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RequireLogin } from 'src/decorator/custom.decorator';
 import { CreateAdminMenuDto } from './dto/create-admin-menu.dto';
+import { RoleListVo } from './vo/role-list.vo';
 
 @ApiTags('Role-Module')
 @Controller('role')
@@ -37,5 +38,15 @@ export class RoleController {
   @Get('getMenuList')
   async getMenuList(){
     return await this.roleService.menuList()
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '获取成功',
+    type: RoleListVo
+  })
+  @Get('getRoleUserList')
+  async getRoleUserList(@Query('roleName')roleName: string){
+    return this.roleService.findRoleUserList(roleName);
   }
 }
