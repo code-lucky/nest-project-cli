@@ -68,8 +68,6 @@ export class RoleService {
     roleList = await this.roleRepository.findBy({
       roleName: roleName
     })
-    
-    console.log('roleList', roleList)
     const roleListVo = new RoleListVo()
 
     roleListVo.roleList = roleList
