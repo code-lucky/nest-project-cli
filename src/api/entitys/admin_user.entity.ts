@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AdminRole } from "./admin_role.entity";
 
 @Entity({
     name: 'admin_user'
@@ -68,4 +69,8 @@ export class AdminUser{
         name: 'update_time'
     })
     updateTime: Date;
+
+    @ManyToOne(()=>AdminRole, role=> role.user)
+    @JoinColumn({name:'role_id', referencedColumnName:'id'})
+    roleList:AdminRole;
 }

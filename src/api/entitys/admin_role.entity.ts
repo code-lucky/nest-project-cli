@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AdminUser } from "./admin_user.entity";
 
 @Entity({
     name: 'admin_role'
@@ -32,4 +33,7 @@ export class AdminRole {
 
     @UpdateDateColumn({name: 'update_time'})
     updateTime: Date;
+
+    @OneToMany(()=>AdminUser, user=> user.roleList)
+    user: AdminUser;
 }

@@ -9,6 +9,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { userLoginByPasswordDto } from './dto/user-login-password.dto';
 import { CreateUserDto } from './dto/create_user.dto';
+import { AdminUser } from '../entitys/admin_user.entity';
+import { UserListVo } from './vo/user-list.vo';
 
 @ApiTags('User-Module')
 @Controller('user')
@@ -76,5 +78,17 @@ export class UserController {
   @ApiBearerAuth()
   async getUserInfo(@Query('userId')userId: number){
     return await this.userService.getUserInfo(userId)
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '获取用户信息',
+    type: UserListVo
+  })
+  @Get('getUserList')
+  @RequireLogin()
+  @ApiBearerAuth()
+  async getUserList(@Query('userName') userName: string){
+    return await this.userService.getUserList(userName)
   }
 }

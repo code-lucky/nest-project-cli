@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { md5 } from 'src/utils/md5';
 import { LoginUserVo } from './vo/login-user.vo';
@@ -7,6 +7,7 @@ import { userLoginByPasswordDto } from './dto/user-login-password.dto';
 import { UserInfoVo } from './vo/user-info.vo';
 import { AdminUser } from '../entitys/admin_user.entity';
 import { CreateUserDto } from './dto/create_user.dto';
+import { UserListVo } from './vo/user-list.vo';
 
 @Injectable()
 export class UserService {
@@ -68,5 +69,24 @@ export class UserService {
     } catch (error) {
       throw new HttpException(error.message,HttpStatus.INTERNAL_SERVER_ERROR)
     }
+  }
+
+  async getUserList(userName: string){
+    const select = ['admin_user.id AS id','admin_user.role_id AS roleId','admin_user.user_name AS userName','role.role_name AS roleName','admin_user.status AS status','admin_user.create_time AS createTime','admin_user.update_time AS updateTime'];
+    const query = this.userRepository.
+    createQueryBuilder('admin_user').
+    leftJoinAndSelect('admin_user.roleList','role').
+    select(select)
+
+    if(userName){
+      query.where(`admin_user.user_name Like :userName`,{userName: `%${userName}%`})
+    }
+    const userList = await query.getRawMany()
+
+    const userListVo = new UserListVo();
+
+    userListVo.userList = userList;
+
+    return userListVo;
   }
 }
