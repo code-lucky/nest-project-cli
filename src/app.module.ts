@@ -18,6 +18,8 @@ import { AdminRole } from './api/entitys/admin_role.entity';
 import { AdminUser } from './api/entitys/admin_user.entity';
 import { AdminMenu } from './api/entitys/admin_menu.entity';
 import { AdminRoleMenu } from './api/entitys/admin_role.menu.entity';
+import { MenuModule } from './menu/menu.module';
+import { MenuModule } from './api/menu/menu.module';
 
 @Module({
   imports: [
@@ -87,7 +89,8 @@ import { AdminRoleMenu } from './api/entitys/admin_role.menu.entity';
     RedisModule,
     EmailModule,
     UserModule,
-    RoleModule
+    RoleModule,
+    MenuModule
   ],
   controllers: [AppController],
   providers: [
