@@ -3,7 +3,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity({
     name: 'admin_menu'
 })
-export class AdminMenu{
+export class AdminMenu {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -14,35 +14,35 @@ export class AdminMenu{
     pid: number;
 
     @Column({
-        comment:'名称',
+        comment: '名称',
         nullable: true
     })
     name: string;
 
     @Column({
-        comment:'图标',
+        comment: '图标',
         nullable: true
     })
     icon: string;
 
     @Column({
-        comment:'权限标识',
+        comment: '权限标识',
         nullable: true
     })
     perms: string;
 
     @Column({
-        comment:'组件路径',
+        comment: '组件路径',
         nullable: true
     })
     component: string;
 
     @Column({
         name: 'menu_type',
-        comment: '类型，C-目录，M-菜单，B-按钮',
+        comment: '类型，0-目录，1-菜单，2-按钮',
         nullable: true
     })
-    menuType: string;
+    menuType: number;
 
     @Column({
         comment: '排序',

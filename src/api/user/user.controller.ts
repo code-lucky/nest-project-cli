@@ -9,7 +9,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { userLoginByPasswordDto } from './dto/user-login-password.dto';
 import { CreateUserDto } from './dto/create_user.dto';
-import { AdminUser } from '../entitys/admin_user.entity';
 import { UserListVo } from './vo/user-list.vo';
 
 @ApiTags('User-Module')
@@ -17,12 +16,6 @@ import { UserListVo } from './vo/user-list.vo';
 export class UserController {
   @Inject(UserService)
   private userService: UserService;
-
-  @Inject(EmailService)
-  private emailService: EmailService;
-  
-  @Inject(RedisService)
-  private redisService: RedisService;
 
   @Inject(JwtService)
   private jwtService: JwtService;

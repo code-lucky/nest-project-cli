@@ -1,12 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Query } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('menu')
 @Controller('menu')
 export class MenuController {
-  constructor(private readonly menuService: MenuService) {}
+  constructor(private readonly menuService: MenuService) { }
 
   @Get('getMenuList')
   @ApiResponse({
@@ -14,13 +15,13 @@ export class MenuController {
     status: HttpStatus.OK,
     type: String
   })
-  async getMenuList(){
+  async getMenuList() {
     return this.menuService.findMenuList()
   }
 
   @Get('getMenuTree')
-  getMenuTree(){
-
+  getMenuTree() {
+    return this.menuService.getMenuTrees()
   }
 
   @Post('addMenu')
@@ -29,12 +30,17 @@ export class MenuController {
     status: HttpStatus.OK,
     type: String
   })
-  async addMenu(@Body()createMenuDto:CreateMenuDto){
+  async addMenu(@Body() createMenuDto: CreateMenuDto) {
     return this.menuService.createMenu(createMenuDto)
   }
 
   @Post('updateMenu')
-  async updateMenu(){
+  async updateMenu(@Body() updateMenu: UpdateMenuDto) {
+    return this.menuService.updateMenuItem(updateMenu)
+  }
 
+  @Get('getMenuById')
+  async getMenuItem(@Query('id') id: number) {
+    return this.menuService.getMenuItemById(id)
   }
 }

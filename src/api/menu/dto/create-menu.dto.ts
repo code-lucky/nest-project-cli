@@ -1,13 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateMenuDto {
-    
+
     @ApiProperty()
     pid: number;
 
     @ApiProperty()
     name: string;
-    
+
     @ApiProperty()
     icon: string;
 
@@ -18,7 +18,7 @@ export class CreateMenuDto {
     component: string;
 
     @ApiProperty()
-    menuType: string;
+    menuType: number;
 
     @ApiProperty()
     sort: number;
