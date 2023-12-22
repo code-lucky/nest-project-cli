@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import type { OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
