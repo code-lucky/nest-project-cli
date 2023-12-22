@@ -1,16 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import Redis from 'ioredis';
+import { Inject, Injectable } from '@nestjs/common';
+import { RedisClientType } from 'redis';
 
 @Injectable()
-export class RedisService extends Redis{
+export class RedisService {
 
-    constructor(private configService: ConfigService){
-        super({
-            port: configService.get('redis_server_port'),
-            host: configService.get('redis_server_host'),
-            password: configService.get('redis_server_password'),
-            lazyConnect: true
-        })
+    @Inject('REDIS_CLIENT') 
+    private redisClient: RedisClientType;
+
+    async get(key: string) {
+        return await this.redisClient.get(key);
+    }
+
+    async set(key: string, value: string | number, ttl?: number) {
+        await this.redisClient.set(key, value);
+
+        if(ttl) {
+            await this.redisClient.expire(key, ttl);
+        }
     }
 }
