@@ -94,7 +94,6 @@ export class MenuService {
         arr.push(item)
       }
     })
-    console.log('arr===>', arr)
     return arr;
   }
 }

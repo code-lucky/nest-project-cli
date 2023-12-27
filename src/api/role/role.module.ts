@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminRole } from '../entitys/admin_role.entity';
 import { AdminMenu } from '../entitys/admin_menu.entity';
 import { AdminUser } from '../entitys/admin_user.entity';
+import { AdminRoleMenu } from '../entitys/admin_role.menu.entity';
 
 @Module({
   imports:[
-    TypeOrmModule.forFeature([AdminRole, AdminMenu, AdminUser])
+    TypeOrmModule.forFeature([AdminRole, AdminMenu, AdminUser,AdminRoleMenu])
   ],
   controllers: [RoleController],
   providers: [RoleService],

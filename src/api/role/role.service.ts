@@ -26,12 +26,23 @@ export class RoleService {
    * @returns 
    */
   async createRoleUser(createRoleDto: CreateRoleDto) {
+
+    console.log(createRoleDto)
+
+    // 新增角色
     const result = await this.roleRepository.save(createRoleDto)
-    if(result){
-      return '添加成功'
-    }else{
-      return '添加失败'
-    }
+    console.log(result)
+    // 新增完进行角色和权限关联
+
+    createRoleDto.rules.forEach((res:any)=>{
+      
+    })
+
+    // if(result){
+    //   return '添加成功'
+    // }else{
+    //   return '添加失败'
+    // }
   }
 
   /**
