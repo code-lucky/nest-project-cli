@@ -7,6 +7,7 @@ import { CreateAdminMenuDto } from './dto/create-admin-menu.dto';
 import { AdminMenu } from '../entitys/admin_menu.entity';
 import { AdminUser } from '../entitys/admin_user.entity';
 import { RoleListVo } from './vo/role-list.vo';
+import { AdminRoleMenu } from '../entitys/admin_role.menu.entity';
 
 @Injectable()
 export class RoleService {
@@ -20,6 +21,9 @@ export class RoleService {
   @InjectRepository(AdminUser)
   private userRepository: Repository<AdminUser>;
 
+  @InjectRepository(AdminRoleMenu)
+  private roleMenuRepository: Repository<AdminRoleMenu>
+
   /**
    * 创建角色用户
    * @param createRoleDto 
@@ -27,22 +31,32 @@ export class RoleService {
    */
   async createRoleUser(createRoleDto: CreateRoleDto) {
 
-    console.log(createRoleDto)
+    const role = await this.roleRepository.findBy({
+      roleName: createRoleDto.roleName
+    })
+
+    // 如果是已存在的角色则不能新增
+    if(role){
+      throw new HttpException('角色昵称已存在', HttpStatus.BAD_REQUEST)
+    }
 
     // 新增角色
     const result = await this.roleRepository.save(createRoleDto)
-    console.log(result)
-    // 新增完进行角色和权限关联
 
-    createRoleDto.rules.forEach((res:any)=>{
-      
+    // 新增完进行角色和权限关联
+    createRoleDto.rules.forEach(async (res:any)=>{
+      const data = {
+        id: result.id,
+        rid: res
+      }
+      await this.roleMenuRepository.save(data)
     })
 
-    // if(result){
-    //   return '添加成功'
-    // }else{
-    //   return '添加失败'
-    // }
+    if(result){
+      return '添加成功'
+    }else{
+      return '添加失败'
+    }
   }
 
   /**
@@ -80,7 +94,6 @@ export class RoleService {
       roleName: roleName
     })
     const roleListVo = new RoleListVo()
-
     roleListVo.roleList = roleList
     return roleListVo.roleList
   }

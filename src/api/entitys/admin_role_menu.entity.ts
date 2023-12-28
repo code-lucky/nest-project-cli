@@ -1,5 +1,8 @@
-import { Column } from "typeorm";
+import { Column, Entity } from "typeorm";
 
+@Entity({
+    name: 'admin_role_menu'
+})
 export class AdminRoleMenu {
 
     @Column({

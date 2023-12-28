@@ -57,13 +57,13 @@ export class UserService {
     })
     if(user) throw new HttpException('已存在该用户',HttpStatus.BAD_REQUEST)
     try {
-      const {userName, password, email, phoneNumber, headPic} = createUser
+      const {userName, password, email, roleId, status} = createUser
       const addUser = new AdminUser()
       addUser.userName = userName;
       addUser.password = md5(password);
       addUser.email = email;
-      addUser.phoneNumber = phoneNumber;
-      addUser.headPic = headPic
+      addUser.roleId = roleId;
+      addUser.status = status
       this.userRepository.save(addUser)
       return '添加成功'
     } catch (error) {
@@ -72,7 +72,7 @@ export class UserService {
   }
 
   async getUserList(userName: string){
-    const select = ['admin_user.id AS id','admin_user.role_id AS roleId','admin_user.user_name AS userName','role.role_name AS roleName','admin_user.status AS status','admin_user.create_time AS createTime','admin_user.update_time AS updateTime'];
+    const select = ['admin_user.id AS id','admin_user.role_id AS roleId','admin_user.user_name AS userName','role.role_name AS roleName','admin_user.email AS email','admin_user.status AS status','admin_user.create_time AS createTime','admin_user.update_time AS updateTime'];
     const query = this.userRepository.
     createQueryBuilder('admin_user').
     leftJoinAndSelect('admin_user.roleList','role').

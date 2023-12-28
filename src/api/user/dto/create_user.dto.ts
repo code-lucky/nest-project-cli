@@ -15,8 +15,10 @@ export class CreateUserDto{
     email: string;
 
     @ApiProperty()
-    phoneNumber: string;
+    @IsNotEmpty()
+    roleId: number;
 
     @ApiProperty()
-    headPic: string;
+    @IsNotEmpty()
+    status: number;
 }
