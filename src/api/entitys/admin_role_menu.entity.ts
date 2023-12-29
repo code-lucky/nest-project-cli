@@ -1,17 +1,22 @@
-import { Column, Entity } from "typeorm";
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { AdminRole } from "./admin_role.entity";
 
 @Entity({
     name: 'admin_role_menu'
 })
 export class AdminRoleMenu {
 
-    @Column({
+    @PrimaryColumn({
         comment: 'roleId'
     })
     id: number;
 
-    @Column({
+    @PrimaryColumn({
         comment: '权限id'
     })
     rid: number;
+
+    @ManyToOne(()=>AdminRole, role=> role.roleMenu)
+    @JoinColumn({name:'id', referencedColumnName:'id'})
+    roleMenuList: AdminRole;
 }

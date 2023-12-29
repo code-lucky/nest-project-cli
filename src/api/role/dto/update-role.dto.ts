@@ -1,4 +1,27 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateRoleDto } from './create-role.dto';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty } from "class-validator";
 
-export class UpdateRoleDto extends PartialType(CreateRoleDto) {}
+export class UpdateRoleDto {
+
+    @ApiProperty()
+    @IsNotEmpty({
+        message: '角色id不能为空'
+    })
+    id: number;
+
+    @ApiProperty()
+    @IsNotEmpty({
+        message: '角色名称不能为空'
+    })
+    roleName: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    isShow: number;
+
+    @ApiProperty()
+    @IsNotEmpty({
+        message: '角色权限不能为空'
+    })
+    rules: number[]
+}

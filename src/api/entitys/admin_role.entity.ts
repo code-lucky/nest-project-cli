@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { AdminUser } from "./admin_user.entity";
+import { AdminRoleMenu } from "./admin_role_menu.entity";
 
 @Entity({
     name: 'admin_role'
@@ -36,4 +37,7 @@ export class AdminRole {
 
     @OneToMany(()=>AdminUser, user=> user.roleList)
     user: AdminUser;
+
+    @OneToMany(()=>AdminRoleMenu, roleMenu=> roleMenu.roleMenuList)
+    roleMenu: AdminRoleMenu;
 }

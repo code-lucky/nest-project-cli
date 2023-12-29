@@ -49,4 +49,13 @@ export class RoleController {
   async getRoleUserList(@Query('roleName')roleName: string){
     return this.roleService.findRoleUserList(roleName);
   }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '更新成功',
+  })
+  @Post('updateRoleUser')
+  async updateRole(@Body() updateRoleDto: UpdateRoleDto){
+    return this.roleService.updateRole(updateRoleDto)
+  }
 }

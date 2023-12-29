@@ -15,6 +15,9 @@ class Role{
 
     @ApiProperty()
     updateTime: Date;
+
+    @ApiProperty()
+    rules: number[]
 }
 
 export class RoleListVo{
