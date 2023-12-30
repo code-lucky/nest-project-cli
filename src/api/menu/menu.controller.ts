@@ -43,4 +43,9 @@ export class MenuController {
   async getMenuItem(@Query('id') id: number) {
     return this.menuService.getMenuItemById(id)
   }
+
+  @Get('getMenuByUserId')
+  async getMenuItemByUserId(@Query('id') id: number){
+    return this.menuService.getMenuByUserId(id)
+  }
 }

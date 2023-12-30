@@ -130,7 +130,6 @@ export class RoleService {
     }
 
     // 第一步删除权限，然后重新写入权限表
-
     await this.roleMenuRepository.
       createQueryBuilder('admin_role_menu').
       delete().
@@ -146,6 +145,7 @@ export class RoleService {
       await this.roleMenuRepository.save(data)
     })
 
+    // 更新role表数据
     const result = await this.roleRepository.
       createQueryBuilder().
       update().

@@ -4,12 +4,20 @@ import { Repository } from 'typeorm';
 import { AdminMenu } from '../entitys/admin_menu.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateMenuDto } from './dto/update-menu.dto';
+import { AdminUser } from '../entitys/admin_user.entity';
+import { AdminRoleMenu } from '../entitys/admin_role_menu.entity';
 
 @Injectable()
 export class MenuService {
 
   @InjectRepository(AdminMenu)
   private menuRepository: Repository<AdminMenu>;
+
+  @InjectRepository(AdminUser)
+  private userRepository: Repository<AdminUser>;
+
+  @InjectRepository(AdminRoleMenu)
+  private roleMenuRepository: Repository<AdminRoleMenu>;
 
   async findMenuList() {
     const menuList = await this.menuRepository.findBy({
@@ -95,5 +103,37 @@ export class MenuService {
       }
     })
     return arr;
+  }
+
+
+  /**
+   * 
+   * @param id 根据用户id查询出权限列表
+   */
+  async getMenuByUserId(id: number) {
+    // 获取到是哪个用户
+    const user = await this.userRepository.findOneBy({ id: id })
+
+    if (!user) {
+      throw new HttpException('未找到该用户', HttpStatus.BAD_REQUEST)
+    }
+
+    // 根据user表去查询有哪些权限
+    const roleMenu = await this.roleMenuRepository.
+      createQueryBuilder('admin_role_menu').
+      select('rid').
+      where({ id: user.roleId }).
+      getRawMany()
+
+    const roleMenuList = roleMenu.map(item => item.rid)
+
+    // 查询权限列表
+    const menuList = await this.menuRepository.
+      createQueryBuilder('admin_menu').
+      select().
+      where("id IN (:list)", { list: roleMenuList }).
+      getMany()
+
+    return menuList;
   }
 }
