@@ -38,6 +38,12 @@ export class AdminMenu {
     component: string;
 
     @Column({
+        comment: '路由路径',
+        nullable: true
+    })
+    path: string;
+
+    @Column({
         name: 'menu_type',
         comment: '类型，0-目录，1-菜单，2-按钮',
         nullable: true

@@ -32,4 +32,7 @@ export class UpdateMenuDto {
     @ApiProperty()
     @IsNotEmpty()
     isShow: number;
+
+    @ApiProperty()
+    path: string;
 }

@@ -30,7 +30,7 @@ export class MenuService {
   async createMenu(createMenuDto: CreateMenuDto) {
     try {
       const menu = new AdminMenu()
-      const { pid, name, icon, perms, component, menuType, sort, isShow } = createMenuDto;
+      const { pid, name, icon, perms, component, menuType, sort, isShow, path } = createMenuDto;
       menu.pid = pid;
       menu.name = name;
       menu.icon = icon;
@@ -39,8 +39,9 @@ export class MenuService {
       menu.menuType = menuType;
       menu.sort = sort;
       menu.isShow = isShow;
+      menu.path = path;
 
-      this.menuRepository.save(createMenuDto)
+      this.menuRepository.save(menu)
       return '新增成功'
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -58,6 +59,7 @@ export class MenuService {
     adminMenu.menuType = updateMenu.menuType;
     adminMenu.sort = updateMenu.sort;
     adminMenu.isShow = updateMenu.isShow;
+    adminMenu.path = updateMenu.path;
 
     try {
       this.menuRepository.createQueryBuilder().

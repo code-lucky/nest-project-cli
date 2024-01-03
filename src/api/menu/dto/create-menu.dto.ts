@@ -25,4 +25,7 @@ export class CreateMenuDto {
 
     @ApiProperty()
     isShow: number;
+
+    @ApiProperty()
+    path: string;
 }

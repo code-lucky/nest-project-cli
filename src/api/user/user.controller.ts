@@ -8,8 +8,9 @@ import { LoginUserVo } from './vo/login-user.vo';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { userLoginByPasswordDto } from './dto/user-login-password.dto';
-import { CreateUserDto } from './dto/create_user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UserListVo } from './vo/user-list.vo';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('User-Module')
 @Controller('user')
@@ -83,5 +84,17 @@ export class UserController {
   @ApiBearerAuth()
   async getUserList(@Query('userName') userName: string){
     return await this.userService.getUserList(userName)
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '更新成功',
+    type: String
+  })
+  @Post('updateUser')
+  @RequireLogin()
+  @ApiBearerAuth()
+  async updateUser(@Body()user: UpdateUserDto){
+    return await this.userService.updateUser(user)
   }
 }

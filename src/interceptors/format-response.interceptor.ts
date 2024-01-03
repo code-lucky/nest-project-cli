@@ -9,10 +9,13 @@ import { map, Observable } from 'rxjs';
 export class FormatResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const response = context.switchToHttp().getResponse<Response>();
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
+    response.header("Pragma", "no-cache");
+    response.header("Expires", '0');
 
     return next.handle().pipe(map((data) => {
       return {
-        code: response.statusCode == 200 || response.statusCode == 201 ? 200: response.statusCode,
+        code: response.statusCode == 200 || response.statusCode == 201 ? 200 : response.statusCode,
         message: 'success',
         data
       }
