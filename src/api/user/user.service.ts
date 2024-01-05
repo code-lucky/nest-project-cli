@@ -9,7 +9,7 @@ import { AdminUser } from '../entitys/admin_user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserListVo } from './vo/user-list.vo';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import { decrypt } from '../../utils/crypto'
 @Injectable()
 export class UserService {
 
@@ -25,12 +25,11 @@ export class UserService {
     if (!user) {
       throw new HttpException('未找到该用户', HttpStatus.BAD_REQUEST)
     }
-    
-    if (user.password !== md5(userLogin.password)) {
-      throw new HttpException('密码错误', HttpStatus.BAD_REQUEST)
+    if (user.password !== md5(decrypt(userLogin.password))) {
+      throw new HttpException('密码错误', HttpStatus.OK)
     }
 
-    if(user.status === 1){
+    if (user.status === 1) {
       throw new HttpException('账户已冻结，请联系管理员', HttpStatus.BAD_REQUEST)
     }
 
@@ -115,9 +114,9 @@ export class UserService {
       }).
       where({ id: userVo.id }).
       execute()
-    if(result){
+    if (result) {
       throw new HttpException('更新成功', HttpStatus.OK)
-    }else{
+    } else {
       throw new HttpException('更新失败', HttpStatus.BAD_REQUEST)
     }
   }
